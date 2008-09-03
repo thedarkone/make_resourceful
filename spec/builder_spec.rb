@@ -152,6 +152,69 @@ describe Resourceful::Builder, " with chained before and after callbacks" do
   end
 end
 
+describe Resourceful::Builder, " with a callback on parent controller" do
+  before :each do
+    # we need both an instance variable (for following specs) and a local variable (for scope)
+    @before_index = before_index = lambda {}
+    
+    @parent = Class.new(ActionController::Base)
+    @parent.class_eval do
+      extend Resourceful::Maker
+      make_resourceful { before :index, &before_index }
+    end
+  end
+  
+  def parents_callbacks
+    @parent.read_inheritable_attribute(:resourceful_callbacks)
+  end
+  
+  def childs_callbacks
+    @child.read_inheritable_attribute(:resourceful_callbacks)
+  end
+  
+  describe "having child controller, with no callbacks on its own" do
+    before(:each) do
+      @child = Class.new(@parent)
+      @child.class_eval do
+        make_resourceful {}
+      end      
+    end
+    
+    it "should inherit parent's callbacks" do
+      parents_callbacks.should == childs_callbacks
+    end
+  end
+  
+  describe "having child controller, with callbacks on its own" do
+
+    before(:each) do
+      @before_index_new = before_index_new = lambda {}
+      @after_update = after_update = lambda {}
+      
+      @child = Class.new(@parent)
+      @child.class_eval do
+        make_resourceful do
+          before :index, &before_index_new
+          after :update, &after_update
+        end
+      end
+    end
+    
+    it "should add its own callbacks" do
+      childs_callbacks[:after][:update].should == [@after_update]
+    end
+    
+    it "should also keep its parent's callbacks" do
+      childs_callbacks[:before][:index].should == [@before_index, @before_index_new]
+    end
+    
+    it "should not add new callbacks to parent controller" do
+      parents_callbacks[:before][:index].should == [@before_index]
+      parents_callbacks[:after][:update].should be_nil
+    end
+  end
+end
+
 describe Resourceful::Builder, " with responses set for several formats" do
   include ControllerMocks
   before :each do

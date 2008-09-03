@@ -23,7 +23,7 @@ module Resourceful
       @inherited        = !kontroller.read_inheritable_attribute(:resourceful_responses).blank?
       @action_module    = Resourceful::Default::Actions.dup
       @ok_actions       = []
-      @callbacks        = {:before => {}, :after => {}}
+      @callbacks        = empty_callbacks_hash
       @responses        = {}
       @publish          = {}
       @parents          = []
@@ -50,7 +50,9 @@ module Resourceful
       kontroller.hidden_actions.reject! &@ok_actions.method(:include?)
       kontroller.send :include, @action_module
 
-      kontroller.read_inheritable_attribute(:resourceful_callbacks).merge! @callbacks
+      merge_ancestor_callbacks(kontroller.read_inheritable_attribute(:resourceful_callbacks))
+      kontroller.write_inheritable_attribute(:resourceful_callbacks, @callbacks)
+
       kontroller.read_inheritable_attribute(:resourceful_responses).merge! @responses
       kontroller.write_inheritable_attribute(:made_resourceful, true)
 
@@ -336,7 +338,28 @@ module Resourceful
     end
 
     private
+
+    # this might be slightly inefficient, but it will only be done once in production and we do need to do a deep copy of parent_callbacks hash
+    def merge_ancestor_callbacks(parent_callbacks)
+      my_current_callbacks, @callbacks = @callbacks, empty_callbacks_hash
+      # parent's callbacks should precede child's callbacks
+      add_callbacks(parent_callbacks)
+      add_callbacks(my_current_callbacks)
+    end
     
+    def add_callbacks(callbacks_hash)
+      return if callbacks_hash.empty?
+      callbacks_hash.each do |type, event_and_callbacks|
+        event_and_callbacks.each do |event, callbacks|
+          callbacks.each {|callback| add_callback(type, event, &callback)}
+        end
+      end
+    end
+    
+    def empty_callbacks_hash
+      {:before => {}, :after => {}}
+    end
+
     def apply_publish
       @publish.each do |action, types|
         @responses[action.to_sym] ||= []
