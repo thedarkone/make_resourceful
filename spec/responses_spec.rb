@@ -1,18 +1,18 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe 'Resourceful::Default::Responses', " with a _flash parameter for :error" do
+describe 'Resourceful::Default::Responses', " with a _flash parameter for :alert" do
   include ControllerMocks
   before :each do
     mock_controller Resourceful::Default::Responses
     @flash = {}
     @controller.stubs(:flash).returns(@flash)
-    @params = {:_flash => {:error => 'Oh no, an error!'}}
+    @params = {:_flash => {:alert => 'Oh no, an error!'}}
     @controller.stubs(:params).returns(@params)
   end
 
-  it "should set the flash for :error to the parameter's value when set_default_flash is called on :error" do
-    @controller.set_default_flash(:error, "Aw there's no error!")
-    @flash[:error].should == 'Oh no, an error!'
+  it "should set the flash for :alert to the parameter's value when set_default_flash is called on :alert" do
+    @controller.set_default_flash(:alert, "Aw there's no error!")
+    @flash[:alert].should == 'Oh no, an error!'
   end
 
   it "should set the flash for :message to the default value when set_default_flash is called on :message" do
@@ -20,9 +20,9 @@ describe 'Resourceful::Default::Responses', " with a _flash parameter for :error
     @flash[:message].should == 'All jim dandy!'
   end
 
-  it "shouldn't set the flash for :error when set_default_flash is called on :message" do
+  it "shouldn't set the flash for :alert when set_default_flash is called on :message" do
     @controller.set_default_flash(:message, "All jim dandy!")
-    @flash[:error].should be_nil
+    @flash[:alert].should be_nil
   end
 end
 
@@ -170,8 +170,8 @@ describe 'Resourceful::Default::Responses', ' for create_fails' do
     responses[:create_fails].find { |f, p| f == :js }[1].call.should == nil
   end
 
-  it "should flash a failure message to :error by default for HTML" do
-    @controller.expects(:set_default_flash).with(:error, "There was a problem!")
+  it "should flash a failure message to :alert by default for HTML" do
+    @controller.expects(:set_default_flash).with(:alert, "There was a problem!")
     @controller.scope(responses[:create_fails].find { |f, p| f == :html }[1]).call
   end
 
@@ -223,8 +223,8 @@ describe 'Resourceful::Default::Responses', ' for update_fails' do
     responses[:update_fails].find { |f, p| f == :js }[1].call.should == nil
   end
 
-  it "should flash a failure message to :error by default for HTML" do
-    @controller.expects(:set_default_flash).with(:error, "There was a problem saving!")
+  it "should flash a failure message to :alert by default for HTML" do
+    @controller.expects(:set_default_flash).with(:alert, "There was a problem saving!")
     @controller.scope(responses[:update_fails].find { |f, p| f == :html }[1]).call
   end
 
@@ -277,8 +277,8 @@ describe 'Resourceful::Default::Responses', ' for destroy_fails' do
     responses[:destroy_fails].find { |f, p| f == :js }[1].call.should == nil
   end
 
-  it "should flash a failure message to :error by default for HTML" do
-    @controller.expects(:set_default_flash).with(:error, "There was a problem deleting!")
+  it "should flash a failure message to :alert by default for HTML" do
+    @controller.expects(:set_default_flash).with(:alert, "There was a problem deleting!")
     @controller.scope(responses[:destroy_fails].find { |f, p| f == :html }[1]).call
   end
 

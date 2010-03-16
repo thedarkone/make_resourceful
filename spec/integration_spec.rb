@@ -145,11 +145,11 @@ describe "ThingsController", "with all the resourceful actions", :type => :integ
     response.should redirect_to('/things/12')
   end
 
-  it "should set an appropriate flash error for an unsuccessful POST /things" do
+  it "should set an appropriate flash alert for an unsuccessful POST /things" do
     Thing.stubs(:new).returns(@object)
     @object.stubs(:save).returns(false)
     post :create
-    flash[:error].should == "There was a problem!"
+    flash[:alert].should == "There was a problem!"
   end
 
   it "should give a failing response for an unsuccessful POST /things" do
@@ -204,11 +204,11 @@ describe "ThingsController", "with all the resourceful actions", :type => :integ
     response.should redirect_to('/things/12')
   end
 
-  it "should set an appropriate flash error for an unsuccessful PUT /things/12" do
+  it "should set an appropriate flash alert for an unsuccessful PUT /things/12" do
     Thing.stubs(:find).returns(@object)
     @object.stubs(:update_attributes).returns(false)
     put :update, :id => 12
-    flash[:error].should == "There was a problem saving!"
+    flash[:alert].should == "There was a problem saving!"
   end
 
   it "should give a failing response for an unsuccessful PUT /things/12" do
@@ -263,11 +263,11 @@ describe "ThingsController", "with all the resourceful actions", :type => :integ
     response.should redirect_to('/things')
   end
 
-  it "should set an appropriate flash error for an unsuccessful DELETE /things/12" do
+  it "should set an appropriate flash alert for an unsuccessful DELETE /things/12" do
     Thing.stubs(:find).returns(@object)
     @object.stubs(:destroy).returns(false)
     delete :destroy, :id => 12
-    flash[:error].should == "There was a problem deleting!"
+    flash[:alert].should == "There was a problem deleting!"
   end
 
   it "should give a failing response for an unsuccessful DELETE /things/12" do
