@@ -42,11 +42,6 @@ describe Resourceful::Default::Actions, " show action" do
   it "should run the response for show" do
     @controller.expects(:response_for).with(:show)
   end
-
-  it "should run the response for show failing if an exception is raised" do
-    @controller.stubs(:load_object).raises("Oh no!")
-    @controller.expects(:response_for).with(:show_fails)
-  end
 end
 
 describe Resourceful::Default::Actions, " successful create action" do

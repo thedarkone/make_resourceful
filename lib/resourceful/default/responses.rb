@@ -57,13 +57,6 @@ module Resourceful
             format.js
           end
 
-          response_for(:show_fails) do |format|
-            not_found = Proc.new { render :text => "No item found", :status => 404 }
-            format.html &not_found
-            format.js &not_found
-            format.xml &not_found
-          end
-
           response_for(:create) do |format|
             format.html do
               set_default_flash(:notice, "Create successful!")
