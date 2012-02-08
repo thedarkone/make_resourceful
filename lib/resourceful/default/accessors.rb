@@ -85,13 +85,12 @@ module Resourceful
       # For example, if Person has_one Hat,
       # then in HatsController current_object essentially runs <tt>Person.find(params[:person_id]).hat</tt>.
       def current_object
-        @current_object ||= if plural?
-          current_model.find(params[:id])
-        else
-          parent_object.send(instance_variable_name)
-        end
+        @current_object ||= find_current_object
       end
 
+      def find_current_object
+        plural? ? current_model.find(params[:id]) : parent_object.send(instance_variable_name)
+      end
 
       # Calls current_object and stores
       # the result in an instance variable
