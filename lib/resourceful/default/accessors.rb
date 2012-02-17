@@ -265,7 +265,11 @@ module Resourceful
       # Note also that the results of this method are cached
       # so that multiple calls don't result in multiple SQL queries.
       def parent_object
-        @parent_object ||= parent_model.find(params["#{parent_name}_id"])
+        @parent_object ||= find_parent_object
+      end
+
+      def find_parent_object
+        parent_model.find(params["#{parent_name}_id"])
       end
 
       # Assigns the current parent object, as given by parent_objects,
