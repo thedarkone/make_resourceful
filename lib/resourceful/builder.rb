@@ -20,7 +20,7 @@ module Resourceful
     # additions to the controller.
     def initialize(kontroller)
       @controller       = kontroller
-      @inherited        = !kontroller.read_inheritable_attribute(:resourceful_responses).blank?
+      @inherited        = !kontroller.resourceful_responses.blank?
       @action_module    = Resourceful::Default::Actions.dup
       @ok_actions       = []
       @callbacks        = empty_callbacks_hash
@@ -50,13 +50,13 @@ module Resourceful
       kontroller.hidden_actions.reject! &@ok_actions.method(:include?)
       kontroller.send :include, @action_module
 
-      merge_ancestor_callbacks(kontroller.read_inheritable_attribute(:resourceful_callbacks))
-      kontroller.write_inheritable_attribute(:resourceful_callbacks, @callbacks)
+      merge_ancestor_callbacks(kontroller.resourceful_callbacks)
 
-      kontroller.read_inheritable_attribute(:resourceful_responses).merge! @responses
-      kontroller.write_inheritable_attribute(:made_resourceful, true)
+      kontroller.resourceful_callbacks = kontroller.resourceful_callbacks.merge @callbacks
+      kontroller.resourceful_responses = kontroller.resourceful_responses.merge @responses
+      kontroller.made_resourceful      = true
 
-      kontroller.write_inheritable_attribute(:parents, @parents)
+      kontroller.parents = @parents
       kontroller.before_filter :load_parent_object, :only => @ok_actions
     end
 
