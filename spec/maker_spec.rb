@@ -13,7 +13,7 @@ describe Resourceful::Maker, "when extended" do
   end
 
   it "should create an empty, inheritable parents array" do
-    @kontroller.parents.should == []
+    @kontroller.resource_parents.should == []
   end
 
   it "should create a made_resourceful variable set to false" do

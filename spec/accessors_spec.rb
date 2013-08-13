@@ -248,9 +248,9 @@ describe Resourceful::Default::Accessors, " with two parent classes set on the c
   include ControllerMocks
   before :each do
     mock_controller Resourceful::Default::Accessors
-    @parents = %w{post comment}
-    @models = @parents.map(&:camelize).map(&method(:stub_const))
-    @kontroller.parents = @parents
+    @resource_parents = %w{post comment}
+    @models = @resource_parents.map(&:camelize).map(&method(:stub_const))
+    @kontroller.resource_parents = @resource_parents
     @controller.stubs(:singular?).returns(false)
     @controller.stubs(:instance_variable_name).returns('lines')
 
@@ -268,7 +268,7 @@ describe Resourceful::Default::Accessors, " with two parent classes set on the c
   end
 
   it "should return the string names of all the parents for #parent_names" do
-    @controller.parent_names.should == @parents
+    @controller.parent_names.should == @resource_parents
   end
 
   it "should return the string name of the current parent for #parent_name" do
@@ -310,9 +310,9 @@ describe Resourceful::Default::Accessors, " with two parent classes set on the c
   include ControllerMocks
   before :each do
     mock_controller Resourceful::Default::Accessors
-    @parents = %w{post comment}
-    @models = @parents.map(&:camelize).map(&method(:stub_const))
-    @kontroller.parents = @parents
+    @resource_parents = %w{post comment}
+    @models = @resource_parents.map(&:camelize).map(&method(:stub_const))
+    @kontroller.resource_parents = @resource_parents
     @controller.stubs(:params).returns({})
     @controller.stubs(:controller_name).returns('line')
     stub_const('Line')
@@ -340,7 +340,7 @@ describe Resourceful::Default::Accessors, " with no parents" do
   include ControllerMocks
   before :each do
     mock_controller Resourceful::Default::Accessors
-    @controller.stubs(:parents).returns([])
+    @controller.stubs(:resource_parents).returns([])
     @controller.stubs(:current_model_name).returns('Line')
     stub_const 'Line'
   end

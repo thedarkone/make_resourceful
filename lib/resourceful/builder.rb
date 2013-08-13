@@ -26,7 +26,7 @@ module Resourceful
       @callbacks        = empty_callbacks_hash
       @responses        = {}
       @publish          = {}
-      @parents          = []
+      @resource_parents = []
     end
 
     # This method is only meant to be called internally.
@@ -56,7 +56,7 @@ module Resourceful
       kontroller.resourceful_responses = kontroller.resourceful_responses.merge @responses
       kontroller.made_resourceful      = true
 
-      kontroller.parents = @parents
+      kontroller.resource_parents = @resource_parents
       kontroller.before_filter :load_parent_object, :only => @ok_actions
     end
 
@@ -326,7 +326,7 @@ module Resourceful
     #   current_objects   #=> Baker.find(12).cakes
     #
     def belongs_to(*parents)
-      @parents = parents.map(&:to_s)
+      @resource_parents = parents.map(&:to_s)
     end
     
     # This method is only meant to be called internally.

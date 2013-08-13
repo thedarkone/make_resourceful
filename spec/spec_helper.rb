@@ -104,8 +104,8 @@ module ControllerMocks
     @kontroller.resourceful_callbacks
   end
 
-  def parents
-    @kontroller.parents
+  def resource_parents
+    @kontroller.resource_parents
   end
 
   # Evaluates the made_resourceful block of mod (a module)

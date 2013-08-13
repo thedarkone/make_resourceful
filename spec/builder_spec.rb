@@ -31,7 +31,7 @@ describe Resourceful::Builder, " applied without any modification" do
 
   it "shouldn't set any parents" do
     @builder.apply
-    parents.should be_empty
+    resource_parents.should be_empty
   end
 
   it "should set the controller as made_resourceful" do
@@ -390,6 +390,6 @@ describe Resourceful::Builder, " belonging to several parents" do
   end
 
   it "should save the parents as the :parents inheritable_attribute" do
-    parents.should == ['post', 'blat', 'stang']
+    resource_parents.should == ['post', 'blat', 'stang']
   end
 end
