@@ -55,7 +55,7 @@ module Resourceful
       end
 
       def find_current_objects
-        current_model.find(:all)
+        current_model.all
       end
 
       # Calls current_objects and stores
