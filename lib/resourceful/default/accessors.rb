@@ -55,7 +55,7 @@ module Resourceful
       end
 
       def find_current_objects
-        current_model.all
+        ((cur_mod = current_model).respond_to?(:to_a) ? cur_mod : cur_mod.all).to_a
       end
 
       # Calls current_objects and stores
